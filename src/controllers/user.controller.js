@@ -1,5 +1,4 @@
 
-const userModel = require('../models/user.model');
 const UserService = require('../services/user.service')
 
 class UserController {
@@ -7,10 +6,12 @@ class UserController {
     
          // login a user
         async login(req, res, next) {
-            const {email, password} = req.body;
+            // const { email, password } = req.body;
+            const data = req.body;
+             console.log(data)
 
             try {
-                const user = await service.findbyID({ email : email});
+                const user = await UserService.findbyID({ email : data.email});
                 
                 if (!user) {
                     return res.status(401).json({ success: false, message: 'Invalid email' })
@@ -91,39 +92,6 @@ class UserController {
                 message: error
             })
         }
-    }
-
-    //Find by username
-    async findByUsername(req, res){
-        const username = req.params.username
-
-        try  {
-            const user = await UserService.fetchOne({ username: username })
-
-            if(!user)
-            {
-                return res.status(403).json({
-                success: false,
-                message: 'User not found'
-            })
-
-            } 
-
-            return res.status(200).json({
-                success: true,
-                message: 'User Fetched Successfully',
-                data: user
-            })
-
-        }  catch(error){
-            return res.status(403).json({
-                success: false,
-                message: error
-            })
-        }
-
-
-        
     }
 
 
